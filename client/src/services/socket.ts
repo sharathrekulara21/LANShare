@@ -41,6 +41,10 @@ export const joinRoom = (code: string) => {
 	socket.emit("join-room", { code });
 };
 
+export const leaveRoom = () => {
+	socket.emit("leave-room");
+};
+
 export const relayMessage = (payload: RelayPayload) => {
 	socket.emit("relay-message", payload);
 };

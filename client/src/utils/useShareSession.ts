@@ -9,6 +9,7 @@ import {
 import {
 	createRoom,
 	joinRoom,
+	leaveRoom,
 	relayMessage,
 	subscribeToRelayMessage,
 	subscribeToRoomCreated,
@@ -185,6 +186,8 @@ export function useShareSession() {
 	);
 
 	const handleResetSession = useCallback(() => {
+		leaveRoom();
+
 		const transferManager = ensureTransferManager();
 
 		dataChannelRef.current?.close();
@@ -815,6 +818,8 @@ export function useShareSession() {
 	 * Create room.
 	 */
 	const handleCreateRoom = useCallback(() => {
+		setError("");
+		leaveRoom();
 		createRoom();
 	}, []);
 
@@ -826,10 +831,10 @@ export function useShareSession() {
 
 		if (!code) {
 			setError("Enter a room code.");
-
 			return;
 		}
 
+		setError("");
 		joinRoom(code);
 	}, [joinCode]);
 

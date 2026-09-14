@@ -43,6 +43,52 @@ export const findRoomCodeForSocket = (socketId: string): string | null => {
 	return null;
 };
 
+export const removeSocketFromRoom = (socketId: string): string | null => {
+	const roomCode = findRoomCodeForSocket(socketId);
+
+	if (!roomCode) {
+		return null;
+	}
+
+	const room = rooms.get(roomCode);
+
+	if (!room) {
+		return null;
+	}
+
+	if (room.senderSocket?.id === socketId) {
+		room.senderSocket = null;
+	}
+
+	if (room.receiverSocket?.id === socketId) {
+		room.receiverSocket = null;
+	}
+
+	const remainingSockets = [room.senderSocket, room.receiverSocket].filter(
+		(peerSocket): peerSocket is Exclude<typeof peerSocket, null> =>
+			Boolean(peerSocket),
+	);
+
+	if (remainingSockets.length === 0) {
+		rooms.delete(roomCode);
+		return roomCode;
+	}
+
+	for (const peerSocket of remainingSockets) {
+		if (!peerSocket.connected) {
+			continue;
+		}
+
+		peerSocket.leave(roomCode);
+		peerSocket.emit("room-expired", {
+			code: roomCode,
+			message: "Session reset.",
+		});
+	}
+
+	return roomCode;
+};
+
 export const touchRoom = (roomCode: string): boolean => {
 	const room = rooms.get(roomCode);
 

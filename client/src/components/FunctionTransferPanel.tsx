@@ -53,9 +53,9 @@ export function FileTransferPanel({
 			{/* Send files */}
 			<label
 				htmlFor='file-picker'
-				className={`mt-5 flex min-h-[165px] flex-col items-center justify-center rounded-xl border border-dashed px-5 py-8 text-center transition ${
+				className={`mt-5 flex min-h-[165px] touch-manipulation flex-col items-center justify-center rounded-xl border border-dashed px-5 py-8 text-center transition ${
 					isConnected && peerReady
-						? "cursor-pointer border-gray-300 bg-gray-50 hover:border-amber-400 hover:bg-amber-50/40"
+						? "cursor-pointer border-gray-300 bg-gray-50 hover:border-amber-400 hover:bg-amber-50/40 active:scale-[0.99]"
 						: "cursor-not-allowed border-gray-200 bg-gray-50 opacity-60"
 				}`}
 			>
@@ -80,7 +80,7 @@ export function FileTransferPanel({
 					multiple={false}
 					onChange={handleSelectFile}
 					disabled={!isConnected || !peerReady}
-					className='hidden'
+					className='sr-only absolute h-px w-px overflow-hidden opacity-0'
 				/>
 			</label>
 
@@ -105,9 +105,9 @@ export function FileTransferPanel({
 						type='button'
 						onClick={handleSendFile}
 						disabled={!canSend}
-						className={`flex shrink-0 items-center gap-2 rounded-lg px-3.5 py-2 text-[10px] font-semibold transition ${
+						className={`flex min-h-[44px] shrink-0 touch-manipulation items-center justify-center gap-2 rounded-lg px-3.5 py-2 text-[10px] font-semibold transition ${
 							canSend
-								? "bg-gray-900 text-white hover:bg-gray-800"
+								? "bg-gray-900 text-white hover:bg-gray-800 active:scale-[0.99]"
 								: "cursor-not-allowed bg-gray-200 text-gray-400"
 						}`}
 					>

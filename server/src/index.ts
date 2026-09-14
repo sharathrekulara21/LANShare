@@ -10,6 +10,7 @@ import {
 	cleanupExpiredRooms,
 	findRoomCodeForSocket,
 	generateRoomCode,
+	removeSocketFromRoom,
 	rooms,
 } from "./rooms";
 
@@ -86,6 +87,14 @@ io.on("connection", (socket) => {
 		});
 
 		console.log(`Room ${roomCode} created by ${socket.id}`);
+	});
+
+	socket.on("leave-room", () => {
+		const roomCode = removeSocketFromRoom(socket.id);
+
+		if (roomCode) {
+			console.log(`Socket ${socket.id} left room ${roomCode}`);
+		}
 	});
 
 	socket.on("join-room", ({ code }: { code?: string }) => {
@@ -190,39 +199,11 @@ io.on("connection", (socket) => {
 	socket.on("disconnect", () => {
 		console.log(`User disconnected: ${socket.id}`);
 
-		const roomCode = findRoomCodeForSocket(socket.id);
+		const roomCode = removeSocketFromRoom(socket.id);
 
-		if (!roomCode) {
-			return;
+		if (roomCode) {
+			console.log(`Room ${roomCode} ended`);
 		}
-
-		const room = rooms.get(roomCode);
-
-		if (!room) {
-			return;
-		}
-
-		const remainingSockets = [room.senderSocket, room.receiverSocket].filter(
-			(peerSocket): peerSocket is Socket =>
-				Boolean(peerSocket) && peerSocket.id !== socket.id,
-		);
-
-		for (const peerSocket of remainingSockets) {
-			if (!peerSocket.connected) {
-				continue;
-			}
-
-			peerSocket.leave(roomCode);
-
-			peerSocket.emit("room-expired", {
-				code: roomCode,
-				message: "Peer disconnected",
-			});
-		}
-
-		rooms.delete(roomCode);
-
-		console.log(`Room ${roomCode} ended`);
 	});
 });
 

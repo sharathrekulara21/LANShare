@@ -24,7 +24,7 @@ export function ModeSelector({
 				<button
 					type='button'
 					onClick={handleCreateRoom}
-					className='group flex min-h-[108px] cursor-pointer flex-col justify-between rounded-xl border border-amber-500 bg-amber-500 p-4 text-left transition hover:bg-amber-600'
+					className='group flex min-h-[108px] cursor-pointer touch-manipulation flex-col justify-between rounded-xl border border-amber-500 bg-amber-500 p-4 text-left transition hover:bg-amber-600 active:scale-[0.99]'
 				>
 					<div className='flex items-center justify-between'>
 						<div className='flex h-9 w-9 items-center justify-center rounded-lg bg-white/20 text-white'>
@@ -76,7 +76,7 @@ export function ModeSelector({
 							<button
 								type='button'
 								onClick={handleJoinRoom}
-								className='flex h-9 cursor-pointer shrink-0 items-center gap-1.5 rounded-lg bg-gray-900 px-3 text-[10px] font-semibold text-white transition hover:bg-gray-800'
+								className='flex h-11 min-h-[44px] w-[88px] cursor-pointer shrink-0 touch-manipulation items-center justify-center gap-1.5 rounded-lg bg-gray-900 px-3 text-[10px] font-semibold text-white transition hover:bg-gray-800 active:scale-[0.99]'
 							>
 								Join
 							</button>
