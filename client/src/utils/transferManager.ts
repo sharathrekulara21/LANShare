@@ -594,10 +594,11 @@ export class TransferManager {
 			let chunkIndex = 0;
 
 			const sendChunk = async (chunkBytes: Uint8Array): Promise<void> => {
-				const payload = chunkBytes.buffer.slice(
-					chunkBytes.byteOffset,
-					chunkBytes.byteOffset + chunkBytes.byteLength,
-				);
+				const payloadBytes = chunkBytes.slice();
+				const payload = payloadBytes.buffer.slice(
+					0,
+					payloadBytes.byteLength,
+				) as ArrayBuffer;
 
 				const frame = encodeBinaryFrame(transferIdBytes, chunkIndex, payload);
 
