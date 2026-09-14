@@ -23,6 +23,7 @@ export function FileTransferPanel({
 	handleSelectFile: (event: React.ChangeEvent<HTMLInputElement>) => void;
 	handleSendFile: () => void;
 }) {
+	const canSelectFile = role === "sender";
 	const canSend = isConnected && peerReady && Boolean(selectedFile);
 
 	return (
@@ -53,8 +54,8 @@ export function FileTransferPanel({
 			{/* Send files */}
 			<label
 				htmlFor='file-picker'
-				className={`mt-5 flex min-h-[165px] touch-manipulation flex-col items-center justify-center rounded-xl border border-dashed px-5 py-8 text-center transition ${
-					isConnected && peerReady
+				className={`relative mt-5 flex min-h-[165px] touch-manipulation flex-col items-center justify-center overflow-hidden rounded-xl border border-dashed px-5 py-8 text-center transition ${
+					canSelectFile
 						? "cursor-pointer border-gray-300 bg-gray-50 hover:border-amber-400 hover:bg-amber-50/40 active:scale-[0.99]"
 						: "cursor-not-allowed border-gray-200 bg-gray-50 opacity-60"
 				}`}
@@ -79,8 +80,9 @@ export function FileTransferPanel({
 					type='file'
 					multiple={false}
 					onChange={handleSelectFile}
-					disabled={!isConnected || !peerReady}
-					className='sr-only absolute h-px w-px overflow-hidden opacity-0'
+					disabled={!canSelectFile}
+					accept='*/*'
+					className='absolute inset-0 h-full w-full cursor-pointer opacity-0'
 				/>
 			</label>
 
